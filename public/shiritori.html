@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>しりとり</h1>
+    <p id="previousWord"></p>
+    <div class="inputs">
+      <input id="nextWordInput" type="text" />
+      <button id="nextWordSendButton">送信</button>
+    </div>
+    
+    <ul id="tango"></ul>
+
+    <script type="module">
+      function update(tango) {
+        const tangoElement = document.querySelector('#tango');
+        tangoElement.innerHTML = '';
+        for (let i = 0; i < tango.length; i++) {
+          const item = document.createElement('li');
+          item.innerText = tango[i];
+          tangoElement.appendChild(item);
+        }
+      }
+      window.onload = async (event) => {
+
+        const response = await fetch("/shiritori");
+        const text = await response.text();
+
+        const tango = JSON.parse(text);
+        update(tango)
+        const previousWord = tango[tango.length - 1];
+                
+        const para = document.querySelector("#previousWord");
+        para.innerText = `前の単語：${previousWord}`;
+      };
+
+      function finish(){
+        alert("んが付いてます");
+        location.href = '/index.html'
+      }
+
+    document.querySelector("#nextWordSendButton").onclick = async (event) => {
+      const nextWord = document.querySelector("#nextWordInput").value;
+      const response = await fetch("/shiritori", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nextWord })
+      });
+      if (response.status / 100 !== 2) {
+        alert(await response.text());
+        return;
+      }
+      const text = await response.text();
+
+      if (
+        text === "ん"
+      ){
+        finish();
+      }
+
+      console.log(text)
+      const tango = JSON.parse(text);
+      console.log(tango)
+      const previousWord = tango[tango.length - 1];
+      update(tango)
+      
+      const para = document.querySelector("#previousWord");
+      para.innerText = `前の単語：${previousWord}`;
+    };
+
+      if (tmp.length > 0) {
+        this.value = tmp.join("");
+      } else {
+        this.value = "";
+      }
+    
+    </script>
+</body>
+</html>

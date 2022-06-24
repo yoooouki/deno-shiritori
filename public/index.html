@@ -1,40 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>しりとり</title>
+    <link rel="stylesheet" href="design.css">
+    
 </head>
 <body>
-    <h1>しりとり</h1>
-    <p id="previousWord"></p>
-    <input id="nextWordInput" type="text" />
-    <button id="nextWordSendButton">送信</button>
+    <div class="all">
+        <input type="button" class="btn" value="開始" >    
+    </div>
+    <script>
+        const inputElement = document.querySelector("input")
 
-    <script type="module">
-        window.onload = async (event) => {
-
-        const response = await fetch("/shiritori");
-        const previousWord = await response.text();
-                
-        const para = document.querySelector("#previousWord");
-        para.innerText = `前の単語：${previousWord}`;
-    };
-    document.querySelector("#nextWordSendButton").onclick = async (event) => {
-      const nextWord = document.querySelector("#nextWordInput").value;
-      const response = await fetch("/shiritori", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nextWord })
-      });
-      if (response.status / 100 !== 2) {
-        alert(await response.text());
-        return;
-      }
-      const previousWord = await response.text();
-      
-      const para = document.querySelector("#previousWord");
-      para.innerText = `前の単語：${previousWord}`;
-    };
+        inputElement.addEventListener("click", () => {
+            location.href = '/shiritori.html'
+        })
     </script>
 </body>
 </html>

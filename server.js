@@ -1,7 +1,9 @@
 import { serve } from "https://deno.land/std@0.138.0/http/server.ts"
 import { serveDir } from "https://deno.land/std@0.138.0/http/file_server.ts";
 
-let previousWord = "しりとり";
+let saisho = ['さかな', 'かし', 'あいす', 'たんす', 'なす', 'はす', 'まうす', 'やす', 'らいす', 'わーきんぐすぺーす'];
+let previousWord = saisho[Math.floor(Math.random()*saisho.l)];
+let tango = [];
 
 console.log("Listening on http://localhost:8000");
 serve(async(req) => {
@@ -9,7 +11,9 @@ serve(async(req) => {
     console.log(pathname);
 
     if (req.method === "GET" && pathname === "/shiritori") {
-        return new Response(previousWord);
+        previousWord = saisho[Math.floor(Math.random()*11)];
+        tango = [previousWord];
+        return new Response(JSON.stringify(tango));
     }
 
     if (req.method === "POST" && pathname === "/shiritori") {
@@ -21,8 +25,21 @@ serve(async(req) => {
         ) {
             return new Response("前の単語に続いていません。", { status: 400 });
         }
+
+        if(
+            tango.includes(nextWord)
+        ){
+            return new Response("重複しています。", { status: 400});
+        }
+
+        if (
+            nextWord.charAt(nextWord.length - 1) === "ん"
+        ){
+            return new Response("ん");
+        }
         previousWord = nextWord;
-        return new Response(previousWord);
+        tango.push(nextWord);
+        return new Response(JSON.stringify(tango));
     }
     
     return serveDir(req, {

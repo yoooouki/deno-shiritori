@@ -1,0 +1,26 @@
+.all .btn {
+    padding: 30px 100px;
+    font-size: 30px;
+    background-color: rgb(101, 196, 101);
+    color: white;
+    display: block;
+    position: realtive;
+    border: 1px solid white;
+    border-radius: 15px;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+.all {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+body, html {
+    margin: 0;
+}
